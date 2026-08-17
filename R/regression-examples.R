@@ -132,3 +132,43 @@ tbl_merge(list(tbl_no_int, tbl_int),
 )
 
 
+#3. Each of the univariate regression examples held the outcome (y =) constant,
+#while varying the predictor variables with include =. You can also look at one
+#predictor across several outcomes. Create a univariate regression table looking
+#at the association between sex (sex_cat) as the x = variable and each of nsibs,
+#sleep_wkdy, and sleep_wknd, and income.
+
+tbl_uvregression(
+	nlsy,
+	x = sex_cat,
+	include = c(
+		nsibs, sleep_wkdy, sleep_wknd,
+		income
+	),
+	method = lm
+)
+
+#4. Fit a Poisson regression (family = poisson()) for the number of siblings,
+#using at least 3 predictors of your choice. Create a nice table displaying your
+#Poisson regression and its exponentiated coefficients.
+
+tbl_uvregression(
+	nlsy,
+	x = sex_cat,
+	include = c(
+		nsibs, sleep_wkdy, sleep_wknd,
+		income
+	),
+method = glm,
+method.args = list(family = poisson()),
+exponentiate = TRUE
+)
+
+#5. Instead of odds ratios for wearing glasses, as in the example in the slides.,
+#we want risk ratios. We can do this by specifying in the regression family =
+#binomial(link = "log"). Regress glasses on eyesight_cat and sex_cat and create
+#a table showing the risk ratios and confidence intervals from this regression.
+
+
+
+
