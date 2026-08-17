@@ -152,8 +152,13 @@ tbl_uvregression(
 #using at least 3 predictors of your choice. Create a nice table displaying your
 #Poisson regression and its exponentiated coefficients.
 
+# poisson model
+logistic_model <- glm(glasses ~ eyesight_cat + sex_cat + income,
+											data = nlsy, family = poisson()
+)
+
 tbl_uvregression(
-	nlsy,
+	poisson model,
 	x = sex_cat,
 	include = c(
 		nsibs, sleep_wkdy, sleep_wknd,
@@ -170,5 +175,36 @@ exponentiate = TRUE
 #a table showing the risk ratios and confidence intervals from this regression.
 
 
+#6. Make a table comparing the logistic and the log-binomial results.
+
+# log-binomial model
+logbinomial_model <- glm(glasses ~ eyesight_cat + sex_cat,
+												 data = nlsy, family = binomial(link = "log")
+)
+
+logistic_table <- tbl_regression(
+	logistic_model,
+	exponentiate = TRUE,
+	label = list(
+		sex_cat ~ "Sex",
+		eyesight_cat ~ "Eyesight"
+	)
+)
+
+logbinomial_table <- tbl_regression(
+	logbinomial_model,
+	exponentiate = TRUE,
+	label = list(
+		sex_cat ~ "Sex",
+		eyesight_cat ~ "Eyesight"
+	)
+)
+
+tbl_merge(list(logistic_table, logbinomial_table),
+					tab_spanner = c("**Logistic**", "**Log-binomial**")
+)
+
+
+#BONUS
 
 
