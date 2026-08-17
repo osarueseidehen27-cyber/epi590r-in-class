@@ -2,6 +2,7 @@ library(tidyverse)
 library(gtsummary)
 install.packages("gtsummary", dependencies = TRUE)
 
+
 # Load and clean data
 nlsy_cols <- c(
   "glasses", "eyesight", "sleep_wkdy", "sleep_wknd",
@@ -82,4 +83,93 @@ tbl_summary(
   # add a caption
   modify_caption("**Participant characteristics**")
 
+
+#EXERCISE
+# 3. Make a tbl_summary(). Include categorical region, race/ethnicity, income, and
+# the sleep variables (use a helper function to select those) and make sure they
+# are nicely labeled.
+#4.Stratify the table by sex. Add a p-value comparing the
+# sexes and an overall column combining both sexes.
+
+tbl_summary(nlsy,
+						by = sex_cat,
+						include = c(region_cat, race_eth_cat, income,
+												sleep_wkdy, sleep_wknd),
+					label = list(
+							region_cat ~ "Region",
+							race_eth_cat ~ "Race/ethnicity",
+							income ~ "Income",
+							sleep_wknd ~ "Sleep on weekends",
+							sleep_wkdy ~ "Sleep on weekdays"
+						)) |>
+	# change the test used to compare sex_cat groups
+					add_p(test = list(
+	all_continuous() ~ "t.test",
+	all_categorical() ~ "chisq.test"
+)) |>
+# add a total column with the number of observations
+add_overall(col_label = "**Total** N = {N}")
+
+#5.For the income variable, show the 10th and 90th percentiles of income with 3
+#digits, and for the sleep variables, show the min and the max with 1 digit.
+
+
+tbl_summary(nlsy,
+					include = c(region_cat, race_eth_cat, income,
+												sleep_wkdy, sleep_wknd),
+							by = sex_cat,
+						digits = list(income ~3,
+													starts_with ("sleep") ~ 1),
+						statistic = list(income ~ "{p10}, {p90}",
+															 starts_with("sleep") ~ "{min}, {max}"),
+
+						label = list(
+							region_cat ~ "Region",
+							race_eth_cat ~ "Race/ethnicity",
+							income ~ "Income",
+							sleep_wknd ~ "Sleep on weekends",
+							sleep_wkdy ~ "Sleep on weekdays"
+						)) |>
+	# change the test used to compare sex_cat groups
+	add_p(test = list(
+		all_continuous() ~ "t.test",
+		all_categorical() ~ "chisq.test"
+	)) |>
+	# add a total column with the number of observations
+	add_overall(col_label = "**Total** N = {N}")
+
+
+#6. Add a footnote to the race/ethnicity variable with a link to the page
+#describing how NLSY classified participants:
+#https://www.nlsinfo.org/content/cohorts/nlsy79/topical-guide/household/race-ethnicity-immigration-data
+
+
+tbl_summary(nlsy,
+						include = c(region_cat, race_eth_cat, income,
+												sleep_wkdy, sleep_wknd),
+						by = sex_cat,
+						digits = list(income ~3,
+													starts_with ("sleep") ~ 1),
+						statistic = list(income ~ "{p10}, {p90}",
+														 starts_with("sleep") ~ "{min}, {max}"),
+
+						label = list(
+							region_cat ~ "Region",
+							race_eth_cat ~ "Race/ethnicity",
+							income ~ "Income",
+							sleep_wknd ~ "Sleep on weekends",
+							sleep_wkdy ~ "Sleep on weekdays"
+						)) |>
+	# change the test used to compare sex_cat groups
+	add_p(test = list(
+		all_continuous() ~ "t.test",
+		all_categorical() ~ "chisq.test"
+	)) |>
+	# add a total column with the number of observations
+	add_overall(col_label = "**Total** N = {N}") |>
+	modify_footnote_body(
+		footnote = "https://www.nlsinfo.org/content/cohorts/nlsy79/topical-guide/household/race-ethnicity-immigration-data",
+		columns = "label",
+		rows = variable == "race_eth_cat" & row_type == "label"
+	)
 
