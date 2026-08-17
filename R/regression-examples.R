@@ -205,6 +205,36 @@ tbl_merge(list(logistic_table, logbinomial_table),
 )
 
 
-#BONUS
+#BONUS: Bonus: Since family = binomial(link = "log") often doesn’t converge, we
+#often use Poisson regression with robust standard errors to estimate risk
+#ratios. Fit a Poisson regression instead of the log-binomial regression for
+#question 6. Then create a table using tidy_fun = partial(tidy_robust, vcov =
+#"HC1"). It will prompt you to install new package(s) (yes!). See this page for
+#more on custom tidiers.
 
+logpoisson_model <- glm(glasses ~ eyesight_cat + sex_cat,
+												data = nlsy, family = poisson()
+)
 
+logpoisson_table <- tbl_regression(
+	logpoisson_model,
+	exponentiate = TRUE,
+	label = list(
+		sex_cat ~ "Sex",
+		eyesight_cat ~ "Eyesight"
+	)
+)
+
+logpoisson_table_robust <- tbl_regression(
+	logpoisson_model,
+	exponentiate = TRUE,
+	label = list(
+		sex_cat ~ "Sex",
+		eyesight_cat ~ "Eyesight"
+	),
+	tidy_fun = partial(tidy_robust, vcov = "HC1")
+)
+
+tbl_merge(list(logpoisson_table, logpoisson_table_robust),
+					tab_spanner = c("**W/o**", "**W/ Robust**")
+)
