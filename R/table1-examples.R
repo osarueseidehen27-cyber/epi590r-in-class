@@ -1,5 +1,6 @@
 library(tidyverse)
 library(gtsummary)
+install.packages("gtsummary", dependencies = TRUE)
 
 # Load and clean data
 nlsy_cols <- c(
