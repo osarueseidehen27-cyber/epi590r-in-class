@@ -61,3 +61,40 @@ tbl_summary(
   include = c(sex_cat, race_eth_cat, region_cat,
               eyesight_cat, glasses, age_bir))
 ```
+
+
+```{r}
+#| label: tbl-other
+#| tbl-cap: "Other table"
+tbl_summary(
+  nlsy,
+  by = sex_cat,
+	include = c(sleep_wkdy, sleep_wknd, region_cat, age_bir),
+label = list(
+		region_cat ~ "Region",
+		sleep_wknd ~ "Hours of sleep on weekend",
+		sleep_wkdy ~ "Hours of sleep on weekday",
+		age_bir ~ "Age at first birth"
+	),
+missing_text = "Missing"
+)
+```
+
+There were a lot of people who slept (@tbl-sleep).
+
+```{r}
+#| label: tbl-sleep
+#| tbl-cap: "Descriptive statistics including sleep"
+
+tbl_summary(nlsy,
+						include = c(starts_with("sleep"), sex_cat, age_bir),
+						by = region_cat) |>
+	add_overall()
+```
+
+```{r}
+#Add a chunk where you calculate median number of hours of sleep on weekends overall in the data (you can use the median(., na.rm = TRUE) function). Make sure your code prints that output when it renders.
+
+
+```
+
