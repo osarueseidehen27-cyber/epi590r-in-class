@@ -90,11 +90,39 @@ tbl_summary(nlsy,
 						include = c(starts_with("sleep"), sex_cat, age_bir),
 						by = region_cat) |>
 	add_overall()
+
+```
+
+
+```{r}
+#| label: tbl-sleep2
+#| tbl-cap: "Descriptive statistics including sleep"
+
+sleep_tabel<- tbl_summary(nlsy,
+						include = c(starts_with("sleep"), sex_cat, age_bir),
+						by = region_cat) |>
+	add_overall()
+sleep_tabel
 ```
 
 ```{r}
 #Add a chunk where you calculate median number of hours of sleep on weekends overall in the data (you can use the median(., na.rm = TRUE) function). Make sure your code prints that output when it renders.
-
+median(nlsy$sleep_wknd, na.rm=TRUE)
 
 ```
+
+```{r}
+median_sleep <- median(nlsy$sleep_wknd, na.rm=TRUE)
+```
+
+The median number of hours of sleep was `r median_sleep`.
+
+```{r}
+#sleep_tabel$table_body
+inline_text(sleep_tabel, variable = "sleep_wknd", column= "stat_0") 
+
+```
+In the sample average sleep on weekends was `r inline_text(sleep_tabel, variable = "sleep_wknd", column= "stat_0")`.
+
+
 
