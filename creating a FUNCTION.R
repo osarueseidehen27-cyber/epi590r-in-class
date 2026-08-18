@@ -67,9 +67,70 @@ raise(2,4)
 raise(4,2)
 
 
+#q5. Create a function that takes a vector of numbers and returns the standard
+#deviation manually (like we did the mean). Use if statements to check if the
+#vector has only one (or fewer) elements and return NA if so. (Hint: the
+#length() function will be helpful!) You don’t need any extra arguments besides
+#the vector of numbers.
 
+#new_mean <- function(x) {
+#	n <- length(x)
+#	mean_val <- sum(x) / n
+#	return(mean_val)
+#}
 
+#My work
+standard <- function(x){
+	n <- length(x)
+	sd_val <- sqrt(sum((x-mean(x))^2)/(n-1))
+	if (n>1) {
+		sd_val <- sd_val
+	} else {
+		sd_val <- "NA"
+	}
+	return(sd_val)
+}
 
+OR
+
+new_sd <- function(x) {
+	demeaned_x <- x - mean(x)
+	squared_demeaned_x <- demeaned_x^2
+	sum_of_squares <- sum(squared_demeaned_x)
+	n_minus_1 <- length(x) - 1
+	std_dev <- sqrt(sum_of_squares / n_minus_1)
+	return(std_dev)
+}
+
+#professor
+new_sd(c(345, 123, 7564, 345, 123, 4653, 4346, 346, 76))
+#r
+sd(c(345, 123, 7564, 345, 123, 4653, 4346, 346, 76))
+
+standard(c(345, 123, 7564, 345, 123, 4653, 4346, 346, 76))
+
+standard(c(1))
+
+#q5. Modify your function to remove the NA values before calculating the
+#standard deviation. (Hint: the na.omit() function will be helpful!) Add an
+#argument na.rm = that defaults to TRUE (the opposite of the na.rm argument in
+#the built-in R function sd(), which defaults to FALSE). If na.rm = FALSE, then
+#the function should return NA if there are any NA values in the vector.
+
+std_dev <- function(x, na.rm = TRUE){
+	if (na.rm) {
+		new_x <-  na.omit(x)
+	} else {
+		new_x <- x
+	}
+	if (length(new_x) <= 1) {
+		return_val <- NA
+	} else {
+		#calculate sd
+		return_val <- sqrt(sum((new_x-mean(new_x))^2)/(n-1))
+	}
+	return(return_val)
+}
 
 
 
