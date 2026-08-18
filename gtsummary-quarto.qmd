@@ -121,8 +121,39 @@ The median number of hours of sleep was `r median_sleep`.
 #sleep_tabel$table_body
 inline_text(sleep_tabel, variable = "sleep_wknd", column= "stat_0") 
 
+
 ```
 In the sample average sleep on weekends was `r inline_text(sleep_tabel, variable = "sleep_wknd", column= "stat_0")`.
 
+```{r}
+#Reformat that inline text from the table so that it only prints the median, not the IQR.
+
+
+#sleep_tabel$table_body
+inline_text(sleep_tabel, variable = "sleep_wknd", pattern = "{median}") 
+
+```
+
+```{r}
+#Change the means to medians in your table and re-render.
+#| label: tbl-sleep-means
+#| tbl-cap: "Descriptive statistics including sleep"
+
+sleep_tabel2<- tbl_summary(nlsy,
+						include = c(starts_with("sleep"), sex_cat, age_bir),
+						by = region_cat,
+						statistic = list(all_continuous() ~ "{mean}, sd = {sd}")
+						) |>
+	add_overall()
+sleep_tabel2
+
+```
+
+
+```{r}
+inline_text(sleep_tabel2, variable = "sleep_wknd", column = "stat_0")
+
+inline_text(sleep_tabel2, variable = "sleep_wknd", pattern = "{mean}")
+```
 
 
